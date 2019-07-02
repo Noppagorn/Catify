@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "348455323983",
+    "firebase_url": "https://catify-714a2.firebaseio.com",
+    "project_id": "catify-714a2",
+    "storage_bucket": "catify-714a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348455323983:android:0f6e0b0623d8b76e",
+        "android_client_info": {
+          "package_name": "com.nongmung.catify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "348455323983-ake7o167d05j7cuua28ke2p979thm9qc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nongmung.catify",
+            "certificate_hash": "00989654e9a71e17484cf25974fd91d5f402b504"
+          }
+        },
+        {
+          "client_id": "348455323983-1tcgm2rirlftbfjllg48q821kmtque68.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTwO_tglBROh_rl_bHnFuBFmtvGYIrRIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "348455323983-1tcgm2rirlftbfjllg48q821kmtque68.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
