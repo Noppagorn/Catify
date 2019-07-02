@@ -12,21 +12,14 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import androidx.annotation.NonNull
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.firebase.storage.UploadTask
-import com.google.android.gms.tasks.OnSuccessListener
 import java.io.File
-import java.nio.file.Path
-import java.nio.file.Paths
 import android.provider.MediaStore
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.feed_row.*
-import kotlinx.android.synthetic.main.feed_row.view.*
+import kotlinx.android.synthetic.main.feed_item.view.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -180,7 +173,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageListViewHolder {
             val messageItem = LayoutInflater.from(applicationContext)
-                .inflate(R.layout.feed_row, parent, false)
+                .inflate(R.layout.feed_item, parent, false)
             return MessageListViewHolder(messageItem)
         }
 
