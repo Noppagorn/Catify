@@ -20,6 +20,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.feed_item.view.*
+import java.util.*
+import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -45,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                         ).value}@splitHeRe#${child.child("type").value}@splitHeRe#${child.child("url_image").value}"
                     )
                 }
-
+                Collections.reverse(listOfMessage)
                 setMessageToView(listOfMessage)
             }
 
