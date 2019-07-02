@@ -14,6 +14,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.File
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.feed_item.view.*
 import java.util.*
 import java.util.stream.Collectors
 import kotlin.collections.ArrayList
+import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity() {
@@ -57,10 +59,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setMessageToView(data: ArrayList<String>) {
+
+        //add to search
+
+        val fromSearch = "o2"//
+//        for (x in data){
+//            val score = getMinimumPenalty(fromSearch,x,-1,-1)
+//
+//
+//        }
+        val dataAfter  = ArrayList<String>()
+        for (x in data){
+            val splitx = x.split("@splitHeRe#")
+            Log.d("TstSearch", splitx.get(3).toString())
+            if (splitx.get(5).toString().equals(fromSearch)){
+                dataAfter.add(x)
+            }
+        }
+
+
+        //finish to search
+
         val mLinearLayoutManager = LinearLayoutManager(applicationContext)
 
         recyclerView.layoutManager = mLinearLayoutManager
-        recyclerView.adapter = MessageListAdapter(data)
+        recyclerView.adapter = MessageListAdapter(dataAfter)
     }
 
     private fun pickImageFromGallery() {
@@ -229,5 +252,99 @@ class MainActivity : AppCompatActivity() {
         //}
 
         return super.onOptionsItemSelected(item)
+    }
+
+    //string alignment
+    fun getMinimumPenalty(
+        x: String, y: String,
+        pxy: Int, pgap: Int
+    ) : Int {
+        var i: Int
+        var j: Int // intialising variables
+
+        val m = x.length // length of gene1
+        val n = y.length // length of gene2
+
+        val dp = Array(n + m + 1) { IntArray(n + m + 1) }
+
+        for (x1 in dp)
+            Arrays.fill(x1, 0)
+
+        // intialising the table
+        i = 0
+        while (i <= n + m) {
+            dp[i][0] = i * pgap
+            dp[0][i] = i * pgap
+            i++
+        }
+
+        // calcuting the
+        //        // minimum penalty
+        i = 1
+        while (i <= m) {
+            j = 1
+            while (j <= n) {
+                if (x[i - 1] == y[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1]
+                } else {
+                    dp[i][j] = Math.min(
+                        Math.min(
+                            dp[i - 1][j - 1] + pxy,
+                            dp[i - 1][j] + pgap
+                        ),
+                        dp[i][j - 1] + pgap
+                    )
+                }
+                j++
+            }
+            i++
+        }
+
+        val l = n + m // maximum possible length
+
+        i = m
+        j = n
+
+        var xpos = l
+        var ypos = l
+
+        val xans = IntArray(l + 1)
+        val yans = IntArray(l + 1)
+
+        while (!(i == 0 || j == 0)) {
+            if (x[i - 1] == y[j - 1]) {
+                xans[xpos--] = x[i - 1].toInt()
+                yans[ypos--] = y[j - 1].toInt()
+                i--
+                j--
+            } else if (dp[i - 1][j - 1] + pxy == dp[i][j]) {
+                xans[xpos--] = x[i - 1].toInt()
+                yans[ypos--] = y[j - 1].toInt()
+                i--
+                j--
+            } else if (dp[i - 1][j] + pgap == dp[i][j]) {
+                xans[xpos--] = x[i - 1].toInt()
+                yans[ypos--] = '_'.toInt()
+                i--
+            } else if (dp[i][j - 1] + pgap == dp[i][j]) {
+                xans[xpos--] = '_'.toInt()
+                yans[ypos--] = y[j - 1].toInt()
+                j--
+            }
+        }
+
+//        print("Minimum aligning the genes = ")
+//        print(dp[m][n].toString() + "\n")
+        //        System.out.println("The aligned genes are :");
+        //        for (i = id; i <= l; i++)
+        //        {
+        //            System.out.print((char)xans[i]);
+        //        }
+        //        System.out.print("\n");
+        //        for (i = id; i <= l; i++)
+        //        {
+        //            System.out.print((char)yans[i]);
+        //        }
+        return dp[m][n]
     }
 }
