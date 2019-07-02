@@ -50,10 +50,14 @@ class CreatePostActivity : AppCompatActivity() {
         }
 
         submitBtn.setOnClickListener {
+            val mSharedPreferences =
+                applicationContext.getSharedPreferences("ACCOUNT", MODE_PRIVATE)
+            val username = mSharedPreferences!!.getString("USERNAME", null)
+
             val database = FirebaseDatabase.getInstance()
             val myRef = database.getReference("cat_adoption").push()
             val key = myRef.key
-            myRef.child("poster").setValue("poster_name")
+            myRef.child("poster").setValue(username)
             myRef.child("location").setValue(locationInput.editText!!.text.toString())
             myRef.child("age").setValue(ageInput.editText!!.text.toString())
             myRef.child("type").setValue(typeInput.editText!!.text.toString())

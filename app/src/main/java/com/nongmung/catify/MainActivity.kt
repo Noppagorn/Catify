@@ -60,30 +60,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun setMessageToView(data: ArrayList<String>) {
 
-        //add to search
-
-        val fromSearch = "o2"//
-//        for (x in data){
-//            val score = getMinimumPenalty(fromSearch,x,-1,-1)
-//
-//
-//        }
-        val dataAfter  = ArrayList<String>()
-        for (x in data){
-            val splitx = x.split("@splitHeRe#")
-            Log.d("TstSearch", splitx.get(3).toString())
-            if (splitx.get(5).toString().equals(fromSearch)){
-                dataAfter.add(x)
-            }
+        val stringFromSearchBar = "persia" // put result of search bar here
+        var dataAfterSearch = ArrayList<String>()
+        dataAfterSearch.addAll(data)
+        if (!stringFromSearchBar.equals("")) {
+            dataAfterSearch = searchData(data, stringFromSearchBar)
         }
-
-
-        //finish to search
+        //
 
         val mLinearLayoutManager = LinearLayoutManager(applicationContext)
 
         recyclerView.layoutManager = mLinearLayoutManager
-        recyclerView.adapter = MessageListAdapter(dataAfter)
+        recyclerView.adapter = MessageListAdapter(dataAfterSearch)
     }
 
     private fun pickImageFromGallery() {
@@ -223,42 +211,27 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        startActivity(Intent(applicationContext, CreatePostActivity::class.java))
-//        val username = "chorn"   // username from UI
-//        val password = "1111"   // password from UI
-//        // sing out
-//        // account
-////            val database = FirebaseDatabase.getInstance()
-////            val myRef = database.getReference("account")
-////            myRef.child(username).setValue(password)
-//
-//        //check runtime permission
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ==
-//                PackageManager.PERMISSION_DENIED
-//            ) {
-//                //permission denied
-//                val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE);
-//                //show popup to request runtime permission
-//                requestPermissions(permissions, PERMISSION_CODE);
-//            } else {
-//                //permission already granted
-//                pickImageFromGallery();
-//            }
-//        } else {
-//            //system OS is < Marshmallow
-//            pickImageFromGallery();
-        //}
-
-        return super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_profile -> {
+            startActivity(Intent(applicationContext, LoginActivity::class.java))
+            true
+        }
+        R.id.action_add_feed -> {
+            startActivity(Intent(applicationContext, CreatePostActivity::class.java))
+            true
+        }
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
+        }
     }
 
     //string alignment
     fun getMinimumPenalty(
         x: String, y: String,
         pxy: Int, pgap: Int
-    ) : Int {
+    ): Int {
         var i: Int
         var j: Int // intialising variables
 
@@ -346,5 +319,18 @@ class MainActivity : AppCompatActivity() {
         //            System.out.print((char)yans[i]);
         //        }
         return dp[m][n]
+    }
+
+    private fun searchData(data: ArrayList<String>, fromSearch: String): ArrayList<String> {
+//        fromSearch = "o2"//
+        val dataAfter = ArrayList<String>()
+        for (x in data) {
+
+            val splitx = x.split("@splitHeRe#")
+            if (splitx.get(5).toString().equals(fromSearch)) {
+                dataAfter.add(x)
+            }
+        }
+        return dataAfter
     }
 }

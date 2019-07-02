@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreatePostActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>

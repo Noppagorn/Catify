@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:orderInCategory="100"
+        android:title="Profile"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_add_feed"
         android:icon="@drawable/ic_add_black_24dp"
         android:orderInCategory="100"
         android:title="Add"
