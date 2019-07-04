@@ -3,17 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_profile"
-        android:icon="@drawable/ic_add_black_24dp"
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_white_24dp"
         android:orderInCategory="100"
-        android:title="Profile"
+        android:title="Search"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_add_feed"
-        android:icon="@drawable/ic_add_black_24dp"
+        android:icon="@drawable/ic_add_white_24dp"
         android:orderInCategory="100"
         android:title="Add"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/ic_account_circle_white_24dp"
+        android:orderInCategory="100"
+        android:title="Profile"
         app:showAsAction="ifRoom" />
 
 </menu>

@@ -7,8 +7,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.create_post.*
-import kotlinx.android.synthetic.main.login.*
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -18,7 +17,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.login)
+        setContentView(R.layout.activity_login)
 
         signUpBtn.setOnClickListener {
             val newUsername = username.editText!!.text.toString().trim()
@@ -37,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
                                     ).show()
                                 }
                             } else {
-                                state = true;
+                                state = true
                                 val mSharedPreferences =
                                     getSharedPreferences("ACCOUNT", MODE_PRIVATE)
                                 val editor = mSharedPreferences!!.edit()
@@ -61,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         applicationContext,
-                        "Add ${6 - newPassword.length} more chars",
+                        "Password is too short\nAdd ${6 - newPassword.length} more chars",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
