@@ -399,7 +399,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/prompt"
-                        android:hint="เพิ่มคอมเมนต์"
+                        android:hint="เพิ่มคอมเม้นต์"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 

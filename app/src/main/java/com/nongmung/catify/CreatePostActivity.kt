@@ -76,8 +76,6 @@ class CreatePostActivity : AppCompatActivity() {
 //            finish()
 
             startActivity(Intent(applicationContext, MapsActivity::class.java))
-
-
         }
     }
 

@@ -46,5 +46,13 @@ dependencies {
 
     //implementation 'com.google.android.gms:play-services-gcm:15.0.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.google.android.gms:play-services-places:15.0.1'
+
+    //implementation 'com.google.android.gms:play-services-location:15.0.1’
+
+    //implementation 'com.android.support:design:23.1.1'
+    implementation 'com.google.android.material:material:1.0.0-rc01'
+    //implementation 'com.google.android.gms:play-services-location:11.8.0'
+
 
 }

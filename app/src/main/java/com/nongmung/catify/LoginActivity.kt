@@ -16,10 +16,10 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
+        setSupportActionBar(toolbar)
 
-        signUpBtn.setOnClickListener {
+        signupBtn.setOnClickListener {
             val newUsername = username.editText!!.text.toString().trim()
             val newPassword = password.editText!!.text.toString()
 
@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
                                 if (!state) {
                                     Toast.makeText(
                                         applicationContext,
-                                        "Username unavailable",
+                                        "Username ถูกใช้ไปแล้ว",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -48,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
                                 mDatabase.child("account").child(newUsername).setValue(newPassword)
                                 Toast.makeText(
                                     applicationContext,
-                                    "Sign up success",
+                                    "เข้าสู่ระบบแล้ว",
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 finish()
@@ -60,16 +60,17 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         applicationContext,
-                        "Password is too short\nAdd ${6 - newPassword.length} more chars",
+                        "รหัสผ่านสั้นไปนะ\nเพิ่มอีก ${6 - newPassword.length} ตัว",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             } else {
-                Toast.makeText(applicationContext, "Username is empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "กรอก username ก่อนสิ", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
-        signInBtn.setOnClickListener {
+        signinBtn.setOnClickListener {
             val newUsername = username.editText!!.text.toString().trim()
             val newPassword = password.editText!!.text.toString()
 
@@ -88,21 +89,21 @@ class LoginActivity : AppCompatActivity() {
 
                                 Toast.makeText(
                                     applicationContext,
-                                    "Sign in success",
+                                    "เข้าสู่ระบบแล้ว",
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 finish()
                             } else {
                                 Toast.makeText(
                                     applicationContext,
-                                    "Invalid password",
+                                    "รหัสผ่านผิดจ้า",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                         } else {
                             Toast.makeText(
                                 applicationContext,
-                                "This account isn't exist",
+                                "บัญชีนี้ไม่มีอยู่จริง",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -111,8 +112,21 @@ class LoginActivity : AppCompatActivity() {
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
             } else {
-                Toast.makeText(applicationContext, "Username is empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "กรอก username ก่อนสิ", Toast.LENGTH_SHORT)
+                    .show()
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        val mSharedPreferencesUser =
+            applicationContext.getSharedPreferences("ACCOUNT", MODE_PRIVATE)
+        val username = mSharedPreferencesUser!!.getString("USERNAME", null)
+
+        if (username == null) {
+            Toast.makeText(applicationContext, "ต้องสมัครสมาชิกก่อนนะ", Toast.LENGTH_SHORT).show()
+        } else {
+            super.onBackPressed()
         }
     }
 }

@@ -23,8 +23,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         setSupportActionBar(toolbar)
+
+        val mSharedPreferencesUser =
+            applicationContext.getSharedPreferences("ACCOUNT", MODE_PRIVATE)
+        val username = mSharedPreferencesUser!!.getString("USERNAME", null)
+
+        if (username == null) {
+            startActivity(Intent(applicationContext, LoginActivity::class.java))
+        }
 
         mDatabase.child("cat_adoption").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

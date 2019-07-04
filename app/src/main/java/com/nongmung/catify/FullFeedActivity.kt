@@ -19,16 +19,26 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import android.content.Intent
+import android.net.Uri
+import androidx.appcompat.app.AlertDialog
+
 
 class FullFeedActivity : AppCompatActivity() {
 
     private val mDatabase = FirebaseDatabase.getInstance().reference
     private val listOfMessage = ArrayList<String>()
     private lateinit var key: String
+    private lateinit var username: String
+    private var isMe = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_full_feed)
+
+        val mSharedPreferencesUser =
+            applicationContext.getSharedPreferences("ACCOUNT", MODE_PRIVATE)
+        val username = mSharedPreferencesUser!!.getString("USERNAME", null)
 
         val mSharedPreferences = applicationContext.getSharedPreferences("FULL_FEED", MODE_PRIVATE)
 
@@ -45,12 +55,28 @@ class FullFeedActivity : AppCompatActivity() {
         descriptionText.text = mSharedPreferences.getString("DESCRIPTION", null)
         key = mSharedPreferences.getString("KEY", null)!!
 
+        if (mSharedPreferences.getString("POSTER_NAME", null) == username) {
+            image_contact.setImageResource(R.drawable.ic_delete_black_24dp)
+            isMe = true
+        } else {
+            image_contact.setImageResource(R.drawable.ic_contact_phone_white_24dp)
+            isMe = false
+        }
+
         Toast.makeText(applicationContext, key, Toast.LENGTH_SHORT).show()
 
         loadMessage()
 
         send_button.setOnClickListener {
             sendComment()
+        }
+
+        image_contact.setOnClickListener {
+            if (isMe) {
+                deletePost()
+            } else {
+                contact(mSharedPreferences.getString("CONTACT", null)!!)
+            }
         }
     }
 
@@ -64,21 +90,40 @@ class FullFeedActivity : AppCompatActivity() {
         }
     }
 
+    private fun contact(phoneNum: String) {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:$phoneNum")
+        startActivity(intent)
+    }
+
+    private fun deletePost() {
+        val builder = AlertDialog.Builder(this@FullFeedActivity)
+        builder.setTitle("เตือนๆ")
+        builder.setMessage("อยากลบประกาศจริงๆเหรอ")
+        builder.setPositiveButton("จริงสิ") { dialog, which ->
+            mDatabase.child("cat_adoption").child(key).removeValue()
+            finish()
+        }
+        builder.setNegativeButton("ไม่อะ") { _, _ -> }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
     private fun sendComment() {
-        val mSharedPreferences =
-            applicationContext.getSharedPreferences("ACCOUNT", MODE_PRIVATE)
-        val username = mSharedPreferences!!.getString("USERNAME", null)
+        if (!commentInput.editText!!.text.isEmpty()) {
+            val database = FirebaseDatabase.getInstance()
+            val myRef = database.getReference("cat_adoption").child(key).child("comment").push()
 
-        val database = FirebaseDatabase.getInstance()
-        val myRef = database.getReference("cat_adoption").child(key).child("comment").push()
+            val tsLong = Timestamp(System.currentTimeMillis())
 
-        val tsLong = Timestamp(System.currentTimeMillis())
+            myRef.child("message_text").setValue(commentInput.editText!!.text.toString())
+            myRef.child("message_user").setValue(username)
+            myRef.child("message_time").setValue(tsLong.time)
 
-        myRef.child("message_text").setValue(commentInput.editText!!.text.toString())
-        myRef.child("message_user").setValue(username)
-        myRef.child("message_time").setValue(tsLong.time)
-
-        commentInput.editText!!.text = null
+            commentInput.editText!!.text = null
+        } else {
+            Toast.makeText(applicationContext, "คอมเม้นต์ว่างไปนะ", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun loadMessage() {
@@ -94,7 +139,7 @@ class FullFeedActivity : AppCompatActivity() {
                             ).value}"
                         )
                     }
-                    Collections.reverse(listOfMessage)
+                    listOfMessage.reverse()
                     setMessageToView(listOfMessage)
                 }
 
