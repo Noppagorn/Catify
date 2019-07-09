@@ -86,7 +86,6 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/prompt"
-                    android:src="@drawable/ic_contact_phone_white_24dp"
                     android:textColor="#fff"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"

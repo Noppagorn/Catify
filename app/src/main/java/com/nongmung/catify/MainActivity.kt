@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.feed_item.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
@@ -58,20 +56,16 @@ class MainActivity : AppCompatActivity() {
         search.editText!!.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 setMessageToView(listOfMessage, search.editText!!.text.toString())
+
                 true
             } else {
                 false
             }
         }
-    }
 
-    private fun getDateTime(s: String): String? {
-        return try {
-            val sdf = SimpleDateFormat("MM/dd/yyyy HH:mm")
-            val netDate = Date(s.toLong())
-            sdf.format(netDate)
-        } catch (e: Exception) {
-            "Invalid date"
+        back_button.setOnClickListener {
+            setMessageToView(listOfMessage, "")
+            search.editText!!.text = null
         }
     }
 
@@ -129,16 +123,16 @@ class MainActivity : AppCompatActivity() {
             val dataSplit = messageList[position].split("@splitHeRe#")
 
             holder.mTextHeader.text = dataSplit[3]
-            holder.mTextPoster.text = dataSplit[5]
-            holder.mTextTime.text = getDateTime(dataSplit[8])
+            holder.mTextLocation.text = dataSplit[4]
+            holder.mTextContact.text = dataSplit[1]
             Picasso.get().load(dataSplit[7]).into(holder.mImageView)
         }
     }
 
     inner class MessageListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val mImageView = view.photo!!
-        val mTextPoster = view.poster!!
-        val mTextTime = view.time!!
+        val mTextLocation = view.location!!
+        val mTextContact = view.contact!!
         val mTextHeader = view.header!!
         val mFeedContainer = view.feed_container!!
     }
@@ -158,10 +152,10 @@ class MainActivity : AppCompatActivity() {
             true
         }
         R.id.action_search -> {
-            if (search.visibility == View.GONE) {
-                search.visibility = View.VISIBLE
+            if (search_bar.visibility == View.GONE) {
+                search_bar.visibility = View.VISIBLE
             } else {
-                search.visibility = View.GONE
+                search_bar.visibility = View.GONE
             }
             true
         }
@@ -174,9 +168,10 @@ class MainActivity : AppCompatActivity() {
         val dataAfter = ArrayList<String>()
         for (x in data) {
             val splitx = x.split("@splitHeRe#")
-            for (i in 0..6) {
+            for (i in 0..7) {
                 if (splitx[i].contains(fromSearch)) {
                     dataAfter.add(x)
+                    break
                 }
             }
         }

@@ -38,7 +38,7 @@ class FullFeedActivity : AppCompatActivity() {
 
         val mSharedPreferencesUser =
             applicationContext.getSharedPreferences("ACCOUNT", MODE_PRIVATE)
-        val username = mSharedPreferencesUser!!.getString("USERNAME", null)
+        username = mSharedPreferencesUser.getString("USERNAME", null)!!
 
         val mSharedPreferences = applicationContext.getSharedPreferences("FULL_FEED", MODE_PRIVATE)
 
@@ -49,7 +49,21 @@ class FullFeedActivity : AppCompatActivity() {
             null
         )} | ${getDateTime(mSharedPreferences.getString("TIME", null)!!)}"
         locationText.text = "อยู่ที่ ${mSharedPreferences!!.getString("LOCATION", null)}"
-        ageText.text = "อายุ ${mSharedPreferences!!.getString("AGE", null)}"
+        val ageSplit = mSharedPreferences.getString("AGE", null)!!.split("/")
+        val year: String
+        val month: String
+        if (ageSplit[0].isEmpty()) {
+            year = ""
+        } else {
+            year = ageSplit[0] + " ปี"
+        }
+        if (ageSplit[1].isEmpty()) {
+            month = ""
+        } else {
+            month = ageSplit[1] + " เดือน"
+        }
+        val age = "อายุ ${year} ${month}"
+        ageText.text = age.replace("  ", " ")
         typeText.text = "สายพันธุ์ ${mSharedPreferences!!.getString("TYPE", null)}"
         contactText.text = "ติดต่อ ${mSharedPreferences!!.getString("CONTACT", null)}"
         descriptionText.text = mSharedPreferences.getString("DESCRIPTION", null)
@@ -62,8 +76,6 @@ class FullFeedActivity : AppCompatActivity() {
             image_contact.setImageResource(R.drawable.ic_contact_phone_white_24dp)
             isMe = false
         }
-
-        Toast.makeText(applicationContext, key, Toast.LENGTH_SHORT).show()
 
         loadMessage()
 
@@ -110,7 +122,7 @@ class FullFeedActivity : AppCompatActivity() {
     }
 
     private fun sendComment() {
-        if (!commentInput.editText!!.text.isEmpty()) {
+        if (commentInput.editText!!.text.isNotEmpty()) {
             val database = FirebaseDatabase.getInstance()
             val myRef = database.getReference("cat_adoption").child(key).child("comment").push()
 

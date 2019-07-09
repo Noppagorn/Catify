@@ -15,7 +15,7 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="มาช่วยน้องๆให้มีบ้านอยู่กันเถอะ"
+        app:title="มาช่วยให้น้องๆมีบ้านอยู่กันเถอะ"
         app:titleTextAppearance="@style/customFontToolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +39,6 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
                 android:fontFamily="@font/prompt"
                 android:hint="username"
                 android:maxLength="10"

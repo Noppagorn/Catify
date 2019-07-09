@@ -19,6 +19,13 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         setSupportActionBar(toolbar)
 
+        val mSharedPreferencesUser =
+            applicationContext.getSharedPreferences("ACCOUNT", MODE_PRIVATE)
+        val usernameText = mSharedPreferencesUser!!.getString("USERNAME", null)
+        if (usernameText != null) {
+            supportActionBar!!.title = "ยินดีต้อนรับคุณ ${usernameText}"
+        }
+
         signupBtn.setOnClickListener {
             val newUsername = username.editText!!.text.toString().trim()
             val newPassword = password.editText!!.text.toString()

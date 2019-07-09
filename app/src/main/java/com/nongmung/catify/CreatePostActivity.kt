@@ -21,6 +21,7 @@ class CreatePostActivity : AppCompatActivity() {
 
     private lateinit var mStorageRef: StorageReference
     private lateinit var file: Uri
+    private var isPictureSelected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,40 +43,45 @@ class CreatePostActivity : AppCompatActivity() {
         }
 
         submitBtn.setOnClickListener {
-//            val mSharedPreferences =
-//                applicationContext.getSharedPreferences("ACCOUNT", MODE_PRIVATE)
-//            val username = mSharedPreferences!!.getString("USERNAME", null)
-//
-//            val database = FirebaseDatabase.getInstance()
-//            val myRef = database.getReference("cat_adoption").push()
-//            val key = myRef.key
-//            myRef.child("poster").setValue(username)
-//            myRef.child("stamp_time").setValue(Timestamp(System.currentTimeMillis()).time.toString())
-//            myRef.child("header").setValue(headerInput.editText!!.text.toString())
-//            myRef.child("location").setValue(locationInput.editText!!.text.toString())
-//            myRef.child("age").setValue(ageInput.editText!!.text.toString())
-//            myRef.child("type").setValue(typeInput.editText!!.text.toString())
-//            myRef.child("contact").setValue(contactInput.editText!!.text.toString())
-//            myRef.child("description").setValue(descriptionInput.editText!!.text.toString())
-//
-//            mStorageRef = FirebaseStorage.getInstance().reference
-//            mStorageRef.child(key!!).putFile(file)
-//                .addOnSuccessListener {
-//                    val result = it.metadata!!.reference!!.downloadUrl
-//                    result.addOnSuccessListener {
-//                        val imageLink = it.toString()
-//                        Toast.makeText(
-//                            this@CreatePostActivity,
-//                            imageLink,
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                        myRef.child("url_image").setValue(imageLink)
-//                    }
-//                }
-//
-//            finish()
+            if (headerInput.editText!!.text.toString().isEmpty() ||
+                locationInput.editText!!.text.toString().isEmpty() ||
+                (ageYearInput.editText!!.text.toString().isEmpty() && ageMonthInput.editText!!.text.toString().isEmpty()) ||
+                typeInput.editText!!.text.toString().isEmpty() ||
+                contactInput.editText!!.text.toString().isEmpty() ||
+                descriptionInput.editText!!.text.toString().isEmpty() || !isPictureSelected
+            ) {
+                Toast.makeText(applicationContext, "กรอกให้ครบสิ", Toast.LENGTH_SHORT).show()
+            } else {
+                val mSharedPreferences =
+                    applicationContext.getSharedPreferences("ACCOUNT", MODE_PRIVATE)
+                val username = mSharedPreferences!!.getString("USERNAME", null)
 
-            startActivity(Intent(applicationContext, MapsActivity::class.java))
+                val database = FirebaseDatabase.getInstance()
+                val myRef = database.getReference("cat_adoption").push()
+                val key = myRef.key
+                myRef.child("poster").setValue(username)
+                myRef.child("stamp_time")
+                    .setValue(Timestamp(System.currentTimeMillis()).time.toString())
+                myRef.child("header").setValue(headerInput.editText!!.text.toString())
+                myRef.child("location").setValue(locationInput.editText!!.text.toString())
+                myRef.child("age")
+                    .setValue("${ageYearInput.editText!!.text}/${ageMonthInput.editText!!.text}")
+                myRef.child("type").setValue(typeInput.editText!!.text.toString())
+                myRef.child("contact").setValue(contactInput.editText!!.text.toString())
+                myRef.child("description").setValue(descriptionInput.editText!!.text.toString())
+
+                mStorageRef = FirebaseStorage.getInstance().reference
+                mStorageRef.child(key!!).putFile(file)
+                    .addOnSuccessListener {
+                        val result = it.metadata!!.reference!!.downloadUrl
+                        result.addOnSuccessListener {
+                            val imageLink = it.toString()
+                            myRef.child("url_image").setValue(imageLink)
+                        }
+                    }
+
+                finish()
+            }
         }
     }
 
@@ -102,7 +108,7 @@ class CreatePostActivity : AppCompatActivity() {
                 ) {
                     pickImageFromGallery()
                 } else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "ไม่สามารถเข้าถึงแกลเลอรี่ได้", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -112,6 +118,7 @@ class CreatePostActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             file = Uri.fromFile(File(getRealPathFromURI(data?.data!!)))
             picShow.setImageURI(data.data)
+            isPictureSelected = true
         }
     }
 
